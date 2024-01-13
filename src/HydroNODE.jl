@@ -9,18 +9,20 @@
 
 # Starting project from within
 cd(@__DIR__)
-using Pkg; Pkg.activate(".."); Pkg.instantiate()
+# using Pkg; Pkg.activate(".."); Pkg.instantiate()
 
 using Revise
 
 using DataFrames, Dates, Statistics
 using DelimitedFiles, CSV
 
-using OrdinaryDiffEq, DiffEqFlux, Lux
+using OrdinaryDiffEq 
+using DiffEqFlux, Lux
 using ComponentArrays
 using SciMLSensitivity
 
-using Optimization, OptimizationOptimisers, OptimizationBBO
+using Optimization 
+using OptimizationOptimisers, OptimizationBBO
 using Zygote
 
 using Interpolations
@@ -35,8 +37,8 @@ Random.seed!(123)
 # USER INPUT:
 
 # set data directory
-project_path = joinpath(pwd(), "..")
-data_path = joinpath(pwd(),"basin_dataset_public_v1p2")
+project_path = dirname(@__DIR__)
+data_path = joinpath(project_path, "basin_timeseries_v1p2_metForcing_obsFlow")
 
 # choose model M50 or M100 or full
 chosen_model_id = "M100"

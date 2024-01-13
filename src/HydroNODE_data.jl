@@ -64,7 +64,7 @@ function load_data(basin_id, data_path, source_data_set::String = "daymet")
     println("Lat,    Elev,   Area [km^2]")
     println(round.(basin_info_forcing.*[1.0; 1.0; 10^-6], digits=2), '\n')
 
-
+    # This is for printing only. Don't pay it any attention.
     gauge_meta_data = gauge_meta[findall(x -> x==parse(Int,basin_id),gauge_meta[:,2]),:]
     println("Gauging station name: ")
     println(gauge_meta_data[!,3][1], '\n')
@@ -94,6 +94,7 @@ function load_data(basin_id, data_path, source_data_set::String = "daymet")
     # Forcings data
     df = CSV.File(path_forcing_data, delim='\t', skipto=5, header = false) |> DataFrame
 
+    #Take first four columns and convert into a single YYYY-MM-DD column
     df_dates = df[!,:Column1]
     df_date_length = length(df_dates[1])-3
     df_dates = Date.(SubString.(df_dates,1,df_date_length), "yyyy mm dd")
@@ -111,6 +112,7 @@ function load_data(basin_id, data_path, source_data_set::String = "daymet")
     renaming = [names(df)[i] => col_names[i] for i in 1:8]
     rename!(df, renaming);
 
+    # Convert daylight seconds to hours
     df[!,Symbol("Daylight(s)")] = df[!,Symbol("Daylight(s)")]./3600
     rename!(df, "Daylight(s)" => "Daylight(h)");
 
