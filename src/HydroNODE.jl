@@ -8,7 +8,7 @@
 # --------------------------------------------------
 
 # Starting project from within
-cd(@__DIR__)
+# cd(@__DIR__)
 # using Pkg; Pkg.activate(".."); Pkg.instantiate()
 
 using Revise
@@ -179,6 +179,9 @@ scatter(train_timepoints, train_y, markersize = 2, markercolor = :black, label =
 plot!(train_timepoints, Q_bucket, color = :blue, label = "M0")
 
 
+# Q_bucket, S_bucket  = basic_bucket_incl_states([S_bucket_precalib..., p_bucket_precalib...], data_timepoints)
+# scatter(data_timepoints[end-1000:end], data_y[end-1000:end], markersize = 2, markercolor = :black, label = "data")
+# plot!(data_timepoints[end-1000:end], Q_bucket[end-1000:end], color = :blue, label = "M0")
 # ===============================================================
 # Neural ODE models
 
@@ -199,8 +202,7 @@ T_bucket_    = train_x[:,3]
 NN_input = [norm_S0.(S0_bucket_) norm_S1.(S1_bucket_) norm_P.(P_bucket_) norm_T.(T_bucket_)]
 
 @info "NN pre-training..."
-p_NN_init = pretrain_NNs_for_bucket_processes(chosen_model_id, NN_NODE, p_NN_init,
-    NN_input, p_bucket_precalib, S0_bucket_, S1_bucket_, Lday_bucket_, P_bucket_, T_bucket_)
+p_NN_init = pretrain_NNs_for_bucket_processes(chosen_model_id, NN_NODE, p_NN_init, NN_input, p_bucket_precalib, S0_bucket_, S1_bucket_, Lday_bucket_, P_bucket_, T_bucket_)
 @info "... complete!"
 
 pred_NODE_model= prep_pred_NODE(NN_NODE, p_bucket_precalib[6:-1:4], S_bucket_precalib, length.(p_NN_init)[1])
